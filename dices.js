@@ -62,13 +62,12 @@ roll(){
 
 
 ///doesn't work
-if(localStorage.playerName != null){
-  alert("Nice to have you back " + localStorage.getItem('username')) 
-}else{
-  playerName = prompt("Please enter your name" , "User") //user=default
-  localStorage.setItem("username", playerName);
-}
-
+//if(localStorage.username){
+//  alert("Nice to have you back " + localStorage.getItem('username'))
+//}else{
+//  newPlayer.playerName = prompt("Please enter your name" , "User") //user=default
+//  localStorage.setItem("username", newPlayer.playerName);
+//}
 
 
 
