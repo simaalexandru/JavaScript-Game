@@ -58,21 +58,32 @@ roll(){
     this.score= this.dice1 + this.dice2;
     return this.score;
   }
+
 }
 
 
-///doesn't work
-//if(localStorage.username){
-//  alert("Nice to have you back " + localStorage.getItem('username'))
-//}else{
-//  newPlayer.playerName = prompt("Please enter your name" , "User") //user=default
-//  localStorage.setItem("username", newPlayer.playerName);
-//}
+
+localStorage.setItem('name', 'playerName');
+
+if (name) {
+  alert("Welcome back, " + name;)
+  localStorage.getItem('name', 'playerName');
+ } else
+playerName = prompt("Please enter your name");
+localStorage.setItem(name, );
+ }
+
+
+ //prompt method (receive the username, stored in playerName )
+
+
+
 
 
 
   function humanRoll(newPlayer){
   if (playerName != null) {
+   //new Player object
     //execute the function first, to get dice1,dice2 and score
     newPlayer.roll();
     document.getElementById("humanDice1").innerHTML = "First dice: " + newPlayer.first;
@@ -82,7 +93,7 @@ roll(){
 }
 
 
-
+//function computerRoll() { }
 //object cannot be instantiated inside a function
 function computerRoll(Computer){
    Computer.roll();
@@ -96,7 +107,7 @@ function compare(newPlayer, Computer){
         message.innerHTML = 'Game is a draw';
 	 } else if(newPlayer.getScore > Computer.getScore){
 		   message.innerHTML =  'You won !';
-    finalHumanScore ++; //add the score
+    finalHumanScore ++;
   } else if(newPlayer.getScore < Computer.getScore){
 	     	message.innerHTML = 'You lost !';
     finalComputerScore++;
