@@ -5,6 +5,8 @@ var newPlayer;
 var Computer;
 
 
+//localStorage.setItem("humanName","");
+
 class Dice{
 //we don't need any constructor, dices get values from roll()
 
@@ -60,24 +62,18 @@ roll(){
   }
 
 }
-
-
-
-localStorage.setItem('name', 'playerName');
-
-if (name) {
-  alert("Welcome back, " + name;)
-  localStorage.getItem('name', 'playerName');
- } else
-playerName = prompt("Please enter your name");
-localStorage.setItem(name, );
+if(localStorage.getItem("humanName")===null) {
+      if (localStorage.humanName){
+            alert("Welcome back, " + localStorage.getItem("humanName"));
+  // localStorage.getItem('name', 'playrName');
+        }
+      }
+else{
+  var playerName = prompt("Please enter your name");
+  var JsonName={'humanName' : playerName};
+  localStorage.setItem('humanName', JSON.stringify( JsonName));
+  alert("Good Luck, " + localStorage.getItem('humanName'));
  }
-
-
- //prompt method (receive the username, stored in playerName )
-
-
-
 
 
 
@@ -119,6 +115,7 @@ function compare(newPlayer, Computer){
 
 //creating the objects, outside the function
 newPlayer=new Player(playerName);
+localStorage.setItem("humanName", playerName);
 Computer = new Player();
 
 
