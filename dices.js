@@ -1,16 +1,14 @@
 //global vars
-var finalHumanScore =0;
-var finalComputerScore = 0;
+var finalHumanScore ;
+var finalComputerScore ;
 var newPlayer;
 var Computer;
 
 
-//localStorage.setItem("humanName","");
-
 class Dice{
 //we don't need any constructor, dices get values from roll()
 
-//get/set for dices
+  //get/set for dices
   get first(){
     return this.dice1;
   }
@@ -27,58 +25,60 @@ class Dice{
     this.dice2=value2;
   }
 
-//randomly provide 2 numbers
-roll(){
-   this.dice1 = Math.floor((Math.random() * 6) + 1);
-   this.dice2 = Math.floor((Math.random() * 6) + 1);
-}
+  //randomly provide 2 numbers
+  roll(){
+    this.dice1 = Math.floor((Math.random() * 6) + 1);
+    this.dice2 = Math.floor((Math.random() * 6) + 1);
+  }
 
 }
 
 
 class Player extends Dice {
-   constructor(name){
-  //takes the constructor from Dice class
-  //super gives acces to dice1, dice2
+   constructor(name) {
+   //takes the constructor from Dice class
+   //super gives acces to dice1, dice2
    super();
    this.name = name;
-   this.score=0; //set score to 0, so super.roll()
-  }
-
-  get getName(){
-    return this.name;
-  }
-
-  get getScore(){
-    return this.score;
-  }
-
-roll(){
-    //keeping functionality form the super class method
-    super.roll();
-    //plus returning the final score(dice1+ dice2)
-    this.score= this.dice1 + this.dice2;
-    return this.score;
-  }
-
-}
-if(localStorage.getItem("humanName")===null) {
-      if (localStorage.humanName){
-            alert("Welcome back, " + localStorage.getItem("humanName"));
-  // localStorage.getItem('name', 'playrName');
-        }
-      }
-else{
-  var playerName = prompt("Please enter your name");
-  var JsonName={'humanName' : playerName};
-  localStorage.setItem('humanName', JSON.stringify( JsonName));
-  alert("Good Luck, " + localStorage.getItem('humanName'));
+   this.score = 0; //set score to 0, so super.roll()
  }
 
+ get getName() {
+   return this.name;
+ }
 
+ get getScore() {
+   return this.score;
+ }
+
+   roll() {
+    //keeping functionality form the super class method
+    super.roll();
+   //plus returning the final score(dice1+ dice2)
+    this.score = this.dice1 + this.dice2;
+    return this.score;
+ }
+ }
+
+    if (localStorage.humanName) {
+           alert("Welcome back, " + localStorage.getItem("humanName"));
+        }else{
+           var playerName = prompt("Please enter your name", 'player');
+           localStorage.setItem('humanName', playerName);
+          //set the name of the player from prompt and store it to localStorage
+          alert("Good Luck, " + localStorage.getItem('humanName'));
+          localStorage.setItem("finalHumanScore", 0);
+          localStorage.setItem("finalComputerScore", 0);
+        //set the score to 0 to a new player
+    }
+
+function clearStorage(){
+  localStorage.clear();
+}
+//clear the storage on buttonClick
 
   function humanRoll(newPlayer){
-  if (playerName != null) {
+  if (localStorage.humanName != null) {
    //new Player object
     //execute the function first, to get dice1,dice2 and score
     newPlayer.roll();
@@ -98,24 +98,28 @@ function computerRoll(Computer){
    document.getElementById("computerResult").innerHTML = "Result: " + Computer.score;
 }
 
-function compare(newPlayer, Computer){
-	 if( newPlayer.getScore== Computer.getScore){
-        message.innerHTML = 'Game is a draw';
-	 } else if(newPlayer.getScore > Computer.getScore){
-		   message.innerHTML =  'You won !';
-    finalHumanScore ++;
-  } else if(newPlayer.getScore < Computer.getScore){
-	     	message.innerHTML = 'You lost !';
+function compare(newPlayer, Computer) {
+  if (newPlayer.getScore == Computer.getScore) {
+    message.innerHTML = 'Game is a draw';
+  } else if (newPlayer.getScore > Computer.getScore) {
+    message.innerHTML = 'You won !';
+    finalHumanScore = localStorage.getItem("finalHumanScore");
+    finalHumanScore++;
+    localStorage.setItem("finalHumanScore", finalHumanScore);
+    //get the score, increment with one, set new value
+  } else if (newPlayer.getScore < Computer.getScore) {
+    message.innerHTML = 'You lost !';
+    finalComputerScore = localStorage.getItem("finalComputerScore");
     finalComputerScore++;
+    localStorage.setItem("finalComputerScore", finalComputerScore);
   }
-  document.getElementById("humanScore").innerHTML = "Your final score: " + finalHumanScore;
-  document.getElementById("computerScore").innerHTML = "Computer's final score: " + finalComputerScore;
+  document.getElementById("humanScore").innerHTML = "Your final score: " + localStorage.getItem("finalHumanScore");
+  document.getElementById("computerScore").innerHTML = "Computer's final score: " + localStorage.getItem("finalComputerScore");
 }
 
 
 //creating the objects, outside the function
 newPlayer=new Player(playerName);
-localStorage.setItem("humanName", playerName);
 Computer = new Player();
 
 
