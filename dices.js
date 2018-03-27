@@ -70,9 +70,13 @@ class Player extends Dice {
           localStorage.setItem("finalHumanScore", 0);
           localStorage.setItem("finalComputerScore", 0);
         //set the score to 0 to a new player
+        document.getElementById("storedName").innerHTML = playerName;
     }
+//location.reload() - page refresh
+
 
 function clearStorage(){
+  alert('Do you want to clear data?');
   localStorage.clear();
 }
 //clear the storage on buttonClick
