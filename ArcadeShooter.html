@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<script type="text/javascript" src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+<script type="text/javascript">
+
+
+var gun, target, bullet,  w, h, score; // global variables
+
+function init(){
+	stage = new createjs.Stage("demoCanvas");
+	h = demoCanvas.height;
+	w = demoCanvas.width;
+	drawGun();
+	drawTarget();
+	window.onkeydown = onKey;
+	//registering any key pressed
+	targetMove();
+  addScore();
+	createjs.Ticker.on("tick", tick); // the main listener
+}
+
+function tick(event) {
+		stage.update(event)
+}
+
+
+//var pt = target.localToLocal(posX, posY, bullet);
+
+function drawGun(){
+	gun = new createjs.Shape()
+	gunColor = gun.graphics.beginFill("DeepSkyBlue")
+	gun.graphics.drawCircle(0, 0, 20)
+	gun.x = 250
+	gun.y = 280
+	stage.addChild(gun)
+}
+
+function drawTarget(){
+	target = new createjs.Shape()
+	targetColor = target.graphics.beginFill("red")
+	target.graphics.drawCircle(0, 0, 20, 20)
+	target.x = 20
+	target.y = 20
+	stage.addChild(target)
+}
+
+function targetMove(){
+	createjs.Tween.get(target, {loop:-1})
+	 .to({y:20, x: 470}, 3000)
+	 .to({y:20, x:20},3000)
+	 //loop: -1  = moving continously
+}
+
+function operateGun(event){
+         bullet = new createjs.Shape()
+         bullet.graphics.beginFill("green").drawCircle(0,0,4)
+         bullet.x = gun.x
+         bullet.y = gun.y
+         stage.addChild(bullet)
+				 //creating the bullet
+        shootBullet()
+        hitTarget()
+				stage.update()
+}
+
+function shootBullet(){
+      	createjs.Tween.get(bullet)
+	      .to({y:-10}, 1500)
+}
+
+
+function onKey(e){
+	switch(e.keyCode){
+		 case 37:
+		  gun.x -= 10;
+		  break;
+      // -= from x position decreases 10px
+		 case 39:
+		  gun.x += 10;
+		  break;
+
+			case 32:
+ 		  operateGun();
+ 		  break;
+	}
+}
+
+function hitTarget(e){
+	target.alpha = 1;
+
+	var pt = bullet.localToLocal(target.x, bullet.y , target);
+	if(target.hitTest(pt.x, pt.y)){
+   console.log("hitted")
+	 };
+console.log(pt.x, pt.y)
+}
+
+
+function addScore(){
+	score = new createjs.Text("0", "20px Arial", "red");
+ 	score.x = w - 50;
+	score.y = h - h + 80;
+ 	score.textBaseline = "alphabetic";
+	score.value = 0;
+	stage.addChild(score);
+}
+
+
+</script>
+
+<style type="text/css">
+#demoCanvas {
+	border: 1px solid gray;
+	padding: 2px;
+}
+</style>
+</head>
+
+<body onload="init();">
+<canvas id="demoCanvas" width="500" height="300"> alternate content </canvas>
+</body>
+</html>
