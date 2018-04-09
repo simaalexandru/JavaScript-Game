@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <script type="text/javascript">
+
+    var gun, target, bullet, w, h, score; // global variables
+    var bulletCord, gunCord;
+
+    function init() {
+      stage = new createjs.Stage("demoCanvas");
+      h = demoCanvas.height;
+      w = demoCanvas.width;
+      drawGun();
+      drawTarget();
+      window.onkeydown = onKey;  //registering any key pressed
+      targetMove();
+      addScore();
+      createjs.Ticker.on("tick", tick); // the main listener
+    }
+
+
+    //in order to be able to create the hitTest, we first need to transfer gun's coordinates localtoGlobal
+    function tick(event) {
+      gunCord = gun.localToGlobal(w / 2, h - 20)
+      //seting the global variable gunCord to the coordinates of the gun
+      //to track at every moment where the gun is
+      stage.update(event)
+
+    }
+
+
+    function drawGun() {
+      gun = new createjs.Shape()
+      gunColor = gun.graphics.beginFill("DeepSkyBlue")
+      gun.graphics.drawRect(0, 0, 15, 30);
+      gun.x = w / 2
+      gun.y = h - 20
+      //bulletCord = gun.x
+      stage.addChild(gun)
+    }
+
+    function drawTarget() {
+      target = new createjs.Shape()
+      targetColor = target.graphics.beginFill("red")
+      target.graphics.drawRect(0, 0, 30, 10);
+      stage.addChild(target);
+    }
+
+    function targetMove() {
+      createjs.Tween.get(target, {
+          loop: true //moving continously
+        })
+        .to({   x: w - 30, y: 0  }, 5000)
+        .to({  x: 0,  y: 0  }, 5000);
+    }
+
+
+
+    function shootBullet() {
+      bullet = new createjs.Shape()
+      bullet.graphics.beginFill("green").drawCircle(0, 0, 5)
+      bullet.x = gun.x + 7;
+      bullet.y = gun.y - 5;
+      bulletCord = gunCord.x
+      createjs.Tween.get(bullet)
+        .to({  y: -300}, 1500)
+      stage.addChild(bullet)
+      //shooting the bullet
+
+      createjs.Ticker.on("tick", hitTest)
+    }
+
+    function hitTest(ev) {
+      //transferring the coordinates from bullet to target, using gunCord ( global)
+      var pt = bullet.localToLocal(gunCord, 300, target)
+      //instead of gunCord it should be bulletCord, but it never reaches the if(line 84)
+      target.alpha = 1
+
+      if (target.hitTest(pt.x, pt.y)) {
+        target.alpha = 0.3
+        score.value++
+        score.text = score.value
+
+      }
+
+      if (score.value == 3) {
+        stage.removeChild(gun)
+        stage.removeChild(score)
+        stage.removeChild(target)
+        message = new createjs.Text("You won!", "20px Arial", "red")
+        message.x = w / 3
+        message.y = h / 2
+        stage.addChild(message)
+
+       //setting the timer to replay the game after 5 secs
+      //   setTimeout(function (){
+      //     init();}, 5000);
+     }
+      stage.update(ev)
+    }
+
+    function onKey(e) {
+      switch (e.keyCode) {
+        case 37:
+          gun.x -= 10;
+          break;
+          // -= from x position decreases 10px
+        case 39:
+          gun.x += 10;
+          break;
+
+        case 32:
+          shootBullet()
+          break;
+      }
+    }
+
+
+
+
+
+    function addScore() {
+      score = new createjs.Text("0", "20px Arial", "red")
+      score.x = w - 50
+      score.y = h - h + 80
+      score.textBaseline = "alphabetic"
+      score.value = 0
+      stage.addChild(score)
+    }
+  </script>
+
+  <style type="text/css">
+    #demoCanvas {
+      border: 1px solid gray;
+      padding: 2px;
+    }
+  </style>
+</head>
+
+<body onload="init();">
+  <canvas id="demoCanvas" width="500" height="300"> alternate content </canvas>
+</body>
+
+</html>
